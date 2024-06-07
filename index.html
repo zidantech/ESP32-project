@@ -49,8 +49,17 @@
 
     </script> -->
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         h1 {
             text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 10px;
         }
         #mainContainer, #geolocation {
             min-height:80px;
@@ -59,6 +68,8 @@
             margin: 10px;
             padding: 10px;
             text-align: center;
+            flex: 1 1 45%; /* Flex properties for responsive design */
+            min-width: 300px; /* Minimum width to ensure components don't get too narrow */
         }
         #status {
             font-weight: bold;
@@ -84,25 +95,35 @@
         .out-of-range {
             color: red;
         }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        #muteButton {
+            margin: 10px;
+        }
     </style>
 </head>
 <body >
     <h1>ESP32-GPS Distance</h1>
-    <div id="map" style="height: 500px; width: 100%;"></div>
-    <div id="mainContainer">
-        <div>
-            <label for="range">Range: <span id="rangeValue">250</span> meters</label><br />
-            <input type="range" id="range" min="0" max="500" value="250" oninput="updateRangeValue()">
+    <div id="map"></div>
+    <div class="container">
+        <div id="mainContainer">
+            <div>
+                <label for="range">Range: <span id="rangeValue">250</span> meters</label><br />
+                <input type="range" id="range" min="0" max="500" value="250" oninput="updateRangeValue()">
+            </div>
+            <div id="result"></div>
+            <div id="status"></div>
         </div>
-        <div id="result"></div>
-        <div id="status"></div>
-    </div>
 
-    <div id="geolocation">
-        <button id="toggleButton">Lock</button>
-        <p id="statusText">Safe</p>
-        <p id="lockedLocation"></p> <!-- Container to show locked location -->
-        <p id="rangeFromLocked"></p> <!-- Container to show range from locked location -->
+        <div id="geolocation">
+            <button id="toggleButton">Lock</button>
+            <p id="statusText">Safe</p>
+            <p id="lockedLocation"></p> <!-- Container to show locked location -->
+            <p id="rangeFromLocked"></p> <!-- Container to show range from locked location -->
+        </div>
     </div>
 
     <button id="muteButton">Mute</button>
@@ -229,7 +250,7 @@
         let audio = null; // Initialize audio variable
         function playAlertSound() {
             if (!audio || audio.paused) { // Check if audio is not playing
-                audio = new Audio('alert.mp3');
+                audio = new Audio('alert.m4a');
                 audio.play();
             }
         }
