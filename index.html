@@ -9,14 +9,37 @@
             text-align: center;
         }
         #mainContainer{
+            height:80px;
             border: 1px solid green;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            text-align: center;
         }
         #geolocation{
+            height:80px;
             border: 1px solid green;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
         }
         #status {
             font-weight: bold;
             font-size: 1.2em;
+        }
+        #range{
+            width: 80%       
+        }
+        #toggleButton{
+            width: 100px;
+            height: 30px;
+            border-radius: 10px;
+            border: 1px;
+        }
+        #toggleButton:hover{
+            width: 110px;
+            height: 32px;
+            transition: ease-in-out;
         }
         .in-range {
             color: green;
@@ -29,8 +52,8 @@
 <body>
     <h1>ESP32-GPS Distance</h1>
     <div id="mainContainer">
-        <div>
-            <label for="range">Range: <span id="rangeValue">250</span> meters</label>
+        <div class="range">
+            <label for="range">Range: <span id="rangeValue">250</span> meters</label> <br>
             <input type="range" id="range" min="0" max="500" value="250" oninput="updateRangeValue()">
         </div>
         <div id="result"></div>

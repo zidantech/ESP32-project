@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+
 // Function to toggle between lock and unlock states
 function toggleLock() {
     const button = document.getElementById('toggleButton');
@@ -170,13 +173,13 @@ function checkDatabaseLocation() {
         fetchDatabaseLocation().then(location => {
             const distance = getDistanceFromLatLonInKm(location.latitude, location.longitude, databaseLocation.latitude, databaseLocation.longitude);
             const statusText = document.getElementById('statusText');
-            if (distance > 0.01) { // 10 meters in km
+            if (distance > 0.1) { // 100 meters in km
                 // Database location has moved more than 10 meters
                 statusText.textContent = 'Not Safe';
                 document.getElementById('geolocation').style.border = '1px solid red'; // Change border color
                 playAlertSound();
             } else {
-                // Database location is within 10 meters
+                // Database location is within 100 meters
                 statusText.textContent = 'Safe';
                 document.getElementById('geolocation').style.border = '1px solid green'; // Change border color
             }
