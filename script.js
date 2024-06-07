@@ -9,7 +9,7 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
     var d = R * c; // Distance in km
-    return d;
+    return d * 1000; // Convert to meters
 }
 
 function deg2rad(deg) {
@@ -46,9 +46,23 @@ function getCurrentPosition() {
     });
 }
 
-// Function to calculate the distance and update the HTML
+// Function to update the range value
+function updateRangeValue() {
+    const range = document.getElementById('range').value;
+    document.getElementById('rangeValue').textContent = range;
+}
+
+// Function to play an alert sound
+function playAlertSound() {
+    const audio = new Audio('alert.mp3');
+    audio.play();
+}
+
+// Function to continuously calculate the distance and update the HTML
 async function calculateDistance() {
     try {
+        const range = document.getElementById('range').value;
+
         // Get user's current location
         const position = await getCurrentPosition();
         const userLat = position.coords.latitude;
@@ -65,9 +79,29 @@ async function calculateDistance() {
         const distance = getDistanceFromLatLonInKm(userLat, userLon, firebaseLat, firebaseLon);
         
         // Display the result
-        document.getElementById('result').innerHTML = `Distance: ${distance.toFixed(2)} km`;
+        document.getElementById('result').innerHTML = `Distance: ${distance.toFixed(2)} meters`;
+
+        // Check if the distance is within the specified range
+        const statusElement = document.getElementById('status');
+        if (distance <= range) {
+            statusElement.innerHTML = "In Range";
+            statusElement.className = "in-range";
+        } else {
+            statusElement.innerHTML = "Out of Range";
+            statusElement.className = "out-of-range";
+            playAlertSound();
+        }
     } catch (error) {
         console.error("Error getting location or calculating distance:", error);
         document.getElementById('result').innerHTML = "Error: " + error.message;
     }
+
+    // Repeat the function after a short delay
+    setTimeout(calculateDistance, 5000); // Repeat every 5 seconds
 }
+
+// Initialize the range value and start calculating distance
+document.addEventListener('DOMContentLoaded', () => {
+    updateRangeValue();
+    calculateDistance();
+});
