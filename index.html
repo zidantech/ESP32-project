@@ -76,12 +76,12 @@
             font-size: 1.2em;
         }
         #range{
-            width: 80%       
+            width: 85%       
         }
         #toggleButton{
             width: 100px;
             height: 30px;
-            border-radius: 10px;
+            border-radius: 10px; 
             border: 1px;
         }
         #toggleButton:hover{
@@ -96,12 +96,19 @@
             color: red;
         }
         #map {
-            height: 400px;
+            height: 300px;
             width: 100%;
-            margin: 10px 0;
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        .mute{
+            text-align: center;
         }
         #muteButton {
-            margin: 10px;
+            width: 90px;
+            height: 30px;
+            border-radius: 10px;
+            border: 1px;
         }
     </style>
 </head>
@@ -111,8 +118,8 @@
     <div class="container">
         <div id="mainContainer">
             <div>
-                <label for="range">Range: <span id="rangeValue">250</span> meters</label><br />
-                <input type="range" id="range" min="0" max="500" value="250" oninput="updateRangeValue()">
+                <label for="range">Range: <span id="rangeValue">500</span> meters</label><br />
+                <input type="range" id="range" min="0" max="1000" value="500" oninput="updateRangeValue()">
             </div>
             <div id="result"></div>
             <div id="status"></div>
@@ -125,8 +132,9 @@
             <p id="rangeFromLocked"></p> <!-- Container to show range from locked location -->
         </div>
     </div>
-
-    <button id="muteButton">Mute</button>
+    <div class="mute">
+        <button id="muteButton">Mute</button>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
@@ -246,27 +254,52 @@
             });
         }
 
-        // Function to play an alert sound
-        let audio = null; // Initialize audio variable
+// Function to play an alert sound
+let audio = null; // Initialize audio variable
+        let isMuted = false; // Initialize mute state
+
         function playAlertSound() {
             if (!audio || audio.paused) { // Check if audio is not playing
                 audio = new Audio('alert.m4a');
-                audio.play();
+                if (!isMuted) { // Play sound only if not muted
+                    audio.play();
+                }
             }
         }
 
-        // Function to stop the audio alert
-        function stopAlertSound() {
-            if (audio) {
-                audio.pause();
+
+
+        // Function to toggle mute state
+        function toggleMute() {
+            const muteButton = document.getElementById('muteButton');
+            if (isMuted) {
+                isMuted = false;
+                muteButton.textContent = 'Mute';
+                if (audio) {
+                    audio.play();
+                }
+            } else {
+                isMuted = true;
+                muteButton.textContent = 'Unmute';
+                if (audio) {
+                    audio.pause();
+                }
             }
         }
 
         // Initialize mute button functionality
         document.addEventListener('DOMContentLoaded', () => {
             const muteButton = document.getElementById('muteButton');
+            muteButton.addEventListener('click', toggleMute);
+        });
+
+
+        // Initialize mute button functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const muteButton = document.getElementById('muteButton');
             muteButton.addEventListener('click', stopAlertSound);
         });
+
 
 
         // Initialize the range value and start calculating distance for the main container
